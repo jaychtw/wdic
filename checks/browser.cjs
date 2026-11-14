@@ -1,0 +1,31 @@
+const { chromium }=require('playwright');
+const assert=require('node:assert/strict');
+(async()=>{
+const browser=await chromium.launch({args:['--no-sandbox']});
+const page=await browser.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
+// Replay one archived CWA event so this check works in every season.
+const e=require('./hualien.json');
+const now=Math.floor(Date.now()/1000);
+await page.route('**/events.json',route=>route.fulfill({json:{events:[{...e,expires:now+3600}],generated:now,feeds:{cwa:{ok:true,checked:now}}}}));
+await page.route('https://www.youtube-nocookie.com/**',route=>route.fulfill({body:'Player URL verified separately'}));
+await page.goto(process.env.STORM_URL||'http://127.0.0.1:8742/');
+await page.locator('.card').first().waitFor();console.log('Initial cards',await page.locator('.card').count());
+await page.locator('#cameraOnly').check();await page.locator('.card').first().click();
+await page.getByRole('heading',{name:'Official sources'}).waitFor();
+const bulletin=await page.locator('#agency a').getAttribute('href');
+assert(bulletin.includes('cwa.gov.tw/V8/E/E/EQ/'));console.log(bulletin);
+assert.match(await page.locator('#cams').innerText(),/Liyu Lake/);
+await page.getByRole('button',{name:'Watch camera'}).first().click();
+const player=await page.locator('iframe').getAttribute('src');
+await page.getByRole('button',{name:'NOAA',exact:true}).click();
+assert.match(await page.locator('#agency').innerText(),/No event-specific/);
+assert.equal(await page.locator('iframe').getAttribute('src'),player);
+await page.getByRole('button',{name:'WMO',exact:true}).click();
+await page.getByRole('button',{name:'繁體中文'}).click();
+await page.getByRole('heading',{name:'官方資料來源'}).waitFor();
+await page.setViewportSize({width:375,height:810});
+assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+await page.getByRole('link',{name:'← 所有事件'}).click(); await page.locator('#search').fill('Hualien');
+assert(await page.locator('.card').count()>0);
+assert.deepEqual(errors,[]);console.log('Mobile layout, language, filters, CWA report, camera and source switching passed.');await browser.close();
+})().catch(e=>{console.error(e);process.exit(1)});

@@ -1,9 +1,0 @@
-node_modules/
-dist/
-.playwright/
-test-results/
-*.log
-
-.local/
-
-.pages-state/

@@ -1,0 +1,24 @@
+{
+  "id": "tw-eq-20261113095555",
+  "kind": "EQ",
+  "name": "ML 3.8",
+  "place": "11.4 km WNW of Hualien County Hall",
+  "pos": [
+    24.02,
+    121.50999999999999
+  ],
+  "issued": 1794534955,
+  "expires": 1794707755,
+  "codes": [
+    "TWN"
+  ],
+  "products": {
+    "cwa": {
+      "issuer": "CWA \u00b7 \u4ea4\u901a\u90e8\u4e2d\u592e\u6c23\u8c61\u7f72",
+      "issued": 1794534955,
+      "intensity": "ML 3.8",
+      "url": "https://www.cwa.gov.tw/V8/E/E/EQ/EQ115000-1113-095555.html"
+    }
+  },
+  "aliases": []
+}
