@@ -1,4 +1,4 @@
-name: Refresh and deploy Storm Chaser
+name: Refresh and deploy WDIC
 on:
   push:
     branches: [main]
@@ -10,7 +10,7 @@ permissions:
   pages: write
   id-token: write
 concurrency:
-  group: storm-chaser-pages
+  group: wdic-pages
   cancel-in-progress: false
 jobs:
   publish:

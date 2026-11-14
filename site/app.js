@@ -3,6 +3,7 @@ const app=document.querySelector('#app'), langButton=document.querySelector('#la
 let zh=localStorage.getItem('sc-language')==='zh', snapshot, authorities={}, failed=false;
 let filter='', query='', cameraOnly=false, limit=12, source='local', jurisdiction='', playing='', current='';
 const t=(en,tw)=>zh?tw:en;
+const brandName=()=>t('World Disaster Information Center','全球災害資訊站');
 const names={TY:['Typhoon','颱風'],HU:['Hurricane','颶風'],TS:['Tropical storm','熱帶風暴'],TC:['Tropical cyclone','熱帶氣旋'],EQ:['Earthquake','地震'],FL:['Flood','洪水'],WF:['Wildfire','野火'],DR:['Drought','乾旱'],VO:['Volcanic activity','火山活動']};
 const cameras=[
  ['aaKOV4qkDHw','Liyu Lake','花蓮鯉魚潭',23.929,121.508],['AKl3F6cAY2Q','Jialulan Coast','臺東加路蘭',22.797,121.198],
@@ -60,7 +61,7 @@ function list(){
 }
 function overview(){
  const events=snapshot.events.filter(e=>e.expires>Date.now()/1000);
- app.innerHTML='<section class="hero"><div class="intro"><div class="kicker">◎ '+t('Global hazard monitor','全球災害監測')+'</div><h1>Storm Chaser</h1><p>'+t('Follow a storm or disaster. Read the latest reports and explore cameras near the event.','追蹤風暴與天然災害，閱讀最新通報，查看事件附近的攝影機。')+'</p></div>'+map(events)+'</section>'+status()+'<div class="sectionhead"><h2>'+t('Event watch','事件觀測')+'</h2><div class="controls"><label><input type="checkbox" id="cameraOnly" ' +(cameraOnly?'checked':'')+ '> '+t('With cameras','有攝影機')+'</label><input type="search" id="search" placeholder="'+t('Search locations or events','搜尋地區或事件')+'" aria-label="'+t('Search reports','搜尋通報')+'" value="'+esc(query)+'"><select id="filter" aria-label="'+t('Hazard type','災害類別')+'"><option value="">'+t('All hazards','所有災害')+'</option>'+Object.keys(names).filter(k=>events.some(e=>e.kind===k)).map(k=>'<option value="'+k+'" '+(filter===k?'selected':'')+'>'+t(...names[k])+'</option>').join('')+'</select></div></div><div id="results"></div>';list();
+ app.innerHTML='<section class="hero"><div class="intro"><div class="kicker">◎ '+t('Global hazard monitor','全球災害監測')+'</div><h1 class="site-title">'+brandName()+'</h1><p>'+t('Follow a storm or disaster. Read the latest reports and explore cameras near the event.','追蹤風暴與天然災害，閱讀最新通報，查看事件附近的攝影機。')+'</p></div>'+map(events)+'</section>'+status()+'<div class="sectionhead"><h2>'+t('Event watch','事件觀測')+'</h2><div class="controls"><label><input type="checkbox" id="cameraOnly" ' +(cameraOnly?'checked':'')+ '> '+t('With cameras','有攝影機')+'</label><input type="search" id="search" placeholder="'+t('Search locations or events','搜尋地區或事件')+'" aria-label="'+t('Search reports','搜尋通報')+'" value="'+esc(query)+'"><select id="filter" aria-label="'+t('Hazard type','災害類別')+'"><option value="">'+t('All hazards','所有災害')+'</option>'+Object.keys(names).filter(k=>events.some(e=>e.kind===k)).map(k=>'<option value="'+k+'" '+(filter===k?'selected':'')+'>'+t(...names[k])+'</option>').join('')+'</select></div></div><div id="results"></div>';list();
 }
 const geoAgency={
  TWN:['Central Weather Administration','https://www.cwa.gov.tw/V8/E/E/index.html','Taiwan'],
@@ -99,6 +100,7 @@ function streams(e){
  return cams.map(({c,km,forecast})=>'<div class="cam">'+link('https://www.youtube.com/watch?v='+c[0],t('Provider','來源'))+'<h3>'+esc(t(c[1],c[2]))+'</h3><p>'+Math.round(km)+' km · '+(forecast?t('near a forecast position','鄰近預測位置'):t('from the reported location','距通報位置'))+'</p><button data-cam="'+c[0]+'">'+(playing===c[0]?t('Close player','關閉播放器'):t('Watch camera','觀看攝影機'))+'</button>'+(playing===c[0]?'<iframe allowfullscreen allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" title="'+esc(t(c[1],c[2]))+'" src="https://www.youtube-nocookie.com/embed/'+c[0]+'?autoplay=1"></iframe>':'')+'</div>').join('');
 }
 function render(){
+ document.title=brandName();document.querySelectorAll('[data-brand]').forEach(node=>{node.textContent=brandName()});
  document.documentElement.lang=zh?'zh-Hant':'en';langButton.textContent=zh?'English':'繁體中文';
  if(!snapshot){app.textContent=t('Loading reports…','正在載入通報…');return}
  const id=location.hash.slice(1);

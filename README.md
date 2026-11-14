@@ -1,6 +1,6 @@
-# Storm Chaser
+# World Disaster Information Center (WDIC) · 全球災害資訊站
 
-Bilingual, event-first tropical cyclone and disaster monitoring on [GitHub Pages](https://jaychtw.github.io/storm-chaser/).
+Bilingual, event-first tropical cyclone and disaster monitoring on GitHub Pages.
 
 Run `python collect.py` to refresh the index, then `python -m http.server --directory site 8000`. Run `python -m unittest -v` for the collector tests. No keys or build dependencies are required.
 

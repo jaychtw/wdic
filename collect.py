@@ -18,7 +18,7 @@ GDACS = 'https://www.gdacs.org/xml/rss_7d.xml'
 CENTRES = {1:'Hong Kong Observatory',2:'Beijing',3:'RSMC Honolulu',4:'RSMC Miami',5:'RSMC Tokyo',6:'RSMC New Delhi',7:'RSMC La Réunion',8:'Australian TCWC',9:'Australian TCWC',10:'Australian TCWC',11:'RSMC Nadi',12:'TCWC Wellington',13:'JTWC',14:'Manila',15:'Macao'}
 
 def read(url):
-    req = urllib.request.Request(url, headers={'User-Agent':'Storm-Chaser/2 (github.com/jaychtw/storm-chaser)'})
+    req = urllib.request.Request(url, headers={'User-Agent':'WDIC/2 (World Disaster Information Center)'})
     with urllib.request.urlopen(req, timeout=35) as response:
         return response.read()
 
