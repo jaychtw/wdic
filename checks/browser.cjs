@@ -1,7 +1,7 @@
 const { chromium }=require('playwright');
 const assert=require('node:assert/strict');
 (async()=>{
-const browser=await chromium.launch({args:['--no-sandbox']});
+const browser=await chromium.launch({executablePath:process.env.CHROME_PATH,args:['--no-sandbox']});
 const page=await browser.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
 // Replay one archived CWA event so this check works in every season.
 const e=require('./hualien.json');

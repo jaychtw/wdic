@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     environment:
       name: github-pages
@@ -27,11 +27,10 @@ jobs:
         if: github.event_name != 'schedule'
         run: |
           npm install --prefix "$RUNNER_TEMP/sc-test" playwright@1.56.1
-          "$RUNNER_TEMP/sc-test/node_modules/.bin/playwright" install --with-deps chromium
           python -m http.server --directory site 8742 &
           server=$!
           trap 'kill "$server"' EXIT
-          NODE_PATH="$RUNNER_TEMP/sc-test/node_modules" node checks/browser.cjs
+          CHROME_PATH="$(command -v google-chrome)" NODE_PATH="$RUNNER_TEMP/sc-test/node_modules" node checks/browser.cjs
       - uses: actions/cache/restore@v4
         with:
           path: .last/events.json
